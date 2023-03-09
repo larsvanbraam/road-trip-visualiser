@@ -1,8 +1,7 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import ClearIcon from '@mui/icons-material/Clear';
 import ScreenshotMonitorIcon from '@mui/icons-material/ScreenshotMonitor';
-
 import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
 import { Libraries } from '@react-google-maps/api/dist/utils/make-load-script-url';
 import {
@@ -10,36 +9,26 @@ import {
   Box,
   Button,
   CircularProgress,
-  Drawer,
   Fab,
   Grid,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow, Toolbar, Typography,
+  Toolbar,
+  Typography,
 } from '@mui/material';
-import DirectionsIcon from '@mui/icons-material/Directions';
-import DriveEtaIcon from '@mui/icons-material/DriveEta';
-import PlaceIcon from '@mui/icons-material/Place';
 import GoogleIcon from '@mui/icons-material/Google';
-
 import roadTripData from './asset/data.json';
 import Directions from './components/direction/Directions';
 import html2canvas from 'html2canvas';
 import { kebabCase } from 'lodash-es';
-
-import './App.css';
-import roadBookData from './asset/data.json';
 import Sidebar from './components/sidebar/Sidebar';
+import TripOverview, { TripOverviewHandles } from './components/trip-overview/TripOverview';
+
+import roadBookData from './asset/data.json';
+import './App.css';
 
 const libraries = ['geometry', 'drawing', 'places', 'places'] as Libraries;
 
 function App() {
+  const tripOverviewHandles = useRef<TripOverviewHandles>()
   const { isLoaded } = useJsApiLoader({
     libraries,
     id: 'google-map-script',
@@ -47,7 +36,6 @@ function App() {
   })
 
   const [activeDay, setActiveDay] = useState<string>();
-  const [drawer, setDrawer] = useState(false);
 
   const sidebarData = useMemo(() =>
     roadTripData.filter((day, index) =>
@@ -71,7 +59,6 @@ function App() {
 
   const onShowRouteClick = useCallback((day:string) => {
     setActiveDay(activeDay === day ? undefined : day);
-    setDrawer(false);
   }, [activeDay])
 
   // Does not work correctly in chrome 😭
@@ -108,7 +95,9 @@ function App() {
           </Button>
           <Button
             color="inherit"
-            onClick={() => setDrawer(!drawer)}
+            onClick={() => {
+              tripOverviewHandles.current?.toggleDrawer()
+            }}
             startIcon={<FormatListBulletedIcon />}
           >
             Full route details
@@ -168,49 +157,12 @@ function App() {
           </Fab>
         </Grid>
       </Grid>
-      <React.Fragment>
-        <Drawer
-          anchor='left'
-          open={drawer}
-          onClose={() => setDrawer(false)}
-        >
-          <Table>
-            <TableHead>
-              <TableRow>
-                {Object.keys(roadTripData[0])
-                  .map(((key) =>
-                      <TableCell key={key}>{key}</TableCell>
-                  ))
-                }
-                <TableCell>View Route</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {roadTripData.map((data) =>
-                <TableRow key={data.dayNumber} selected={activeDay === data.dayNumber}>
-                  {Object.entries(data)
-                    .map(([key, value], index) =>
-                      <TableCell key={`${value}.${index}`} >
-                        {value || '-'}
-                      </TableCell>
-                    )
-                  }
-                  <TableCell>
-                    <Button
-                      sx={{whiteSpace: 'nowrap'}}
-                      onClick={() => onShowRouteClick(data.dayNumber)}
-                      startIcon={<DirectionsIcon />}
-                      variant="outlined"
-                    >
-                      View route
-                    </Button>
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </Drawer>
-      </React.Fragment>
+      <TripOverview
+        data={roadTripData}
+        activeDay={activeDay}
+        onDayClick={onShowRouteClick}
+        handlesRef={tripOverviewHandles}
+      />
     </Box>
   );
 }

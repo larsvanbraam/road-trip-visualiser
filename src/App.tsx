@@ -1,20 +1,14 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
-import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import ClearIcon from '@mui/icons-material/Clear';
 import ScreenshotMonitorIcon from '@mui/icons-material/ScreenshotMonitor';
 import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
 import { Libraries } from '@react-google-maps/api/dist/utils/make-load-script-url';
 import {
-  AppBar,
   Box,
-  Button,
   CircularProgress,
   Fab,
   Grid,
-  Toolbar,
-  Typography,
 } from '@mui/material';
-import GoogleIcon from '@mui/icons-material/Google';
 import roadTripData from './asset/data.json';
 import Directions from './components/direction/Directions';
 import html2canvas from 'html2canvas';
@@ -24,6 +18,7 @@ import TripOverview, { TripOverviewHandles } from './components/trip-overview/Tr
 
 import roadBookData from './asset/data.json';
 import './App.css';
+import Navigation from './components/navigation/Navigation';
 
 const libraries = ['geometry', 'drawing', 'places', 'places'] as Libraries;
 
@@ -77,33 +72,9 @@ function App() {
 
   return (
     <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column'}}>
-      <AppBar  position="relative" >
-        <Toolbar>
-          <Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1}}>
-            <Typography variant="h5" component="h1" >
-              <strong>Road Trip Visualizer</strong> | <small>Amerika 2023</small>
-            </Typography>
-          </Box>
-          <Button
-            color="inherit"
-            href={`https://docs.google.com/spreadsheets/d/${process.env.REACT_APP_SHEET_ID}`}
-            target="_blank"
-            startIcon={<GoogleIcon />}
-            sx={{ mr: 1 }}
-          >
-            Source Sheet
-          </Button>
-          <Button
-            color="inherit"
-            onClick={() => {
-              tripOverviewHandles.current?.toggleDrawer()
-            }}
-            startIcon={<FormatListBulletedIcon />}
-          >
-            Full route details
-          </Button>
-        </Toolbar>
-      </AppBar>
+      <Navigation onFullRouteClick={() => {
+        tripOverviewHandles.current?.toggleDrawer()}
+      } />
       <Grid container spacing={0} direction="row" sx={{ flexGrow: 1}}>
         <Grid item sm={12} md={2} sx={{height: '100%', overflow: 'hidden'}} justifyContent="stretch">
           <Sidebar
@@ -117,7 +88,6 @@ function App() {
             <GoogleMap
               mapContainerClassName='map-container'
               mapContainerStyle={{
-                // aspectRatio: 16/9,
                 width: '100%',
                 height: '100%',
               }}

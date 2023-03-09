@@ -105,7 +105,7 @@ async function parseSheet(auth) {
   );
 
   // Write the result to the file that we can read with our application
-  fs.writeFile(`${REACT_APP_OUTPUT_PATH}/road-book-data.json`, JSON.stringify(result), function(error){
+  fs.writeFile(`${REACT_APP_OUTPUT_PATH}/data.json`, JSON.stringify(result), function(error){
     if (error) {
       console.log('Something went wrong writing the JSON object to a file.');
       return console.log(error);

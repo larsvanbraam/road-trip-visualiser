@@ -28,12 +28,14 @@ import DriveEtaIcon from '@mui/icons-material/DriveEta';
 import PlaceIcon from '@mui/icons-material/Place';
 import GoogleIcon from '@mui/icons-material/Google';
 
-import roadBookData from './asset/road-book-data.json';
+import roadTripData from './asset/data.json';
 import Directions from './components/direction/Directions';
 import html2canvas from 'html2canvas';
 import { kebabCase } from 'lodash-es';
 
 import './App.css';
+import roadBookData from './asset/data.json';
+import Sidebar from './components/sidebar/Sidebar';
 
 const libraries = ['geometry', 'drawing', 'places', 'places'] as Libraries;
 
@@ -47,14 +49,23 @@ function App() {
   const [activeDay, setActiveDay] = useState<string>();
   const [drawer, setDrawer] = useState(false);
 
-  const filteredRoadBook = useMemo(() => roadBookData.filter(({morningLocation, eveningLocation}, index, array) =>
+  const sidebarData = useMemo(() =>
+    roadTripData.filter((day, index) =>
+      day.morningLocation !== day.eveningLocation &&
+      index !== 0 &&
+      index !== roadBookData.length -1
+    ),
+    [roadTripData]
+  )
+
+  const filteredRoadBook = useMemo(() => roadTripData.filter(({morningLocation, eveningLocation}, index, array) =>
     morningLocation !== eveningLocation &&
     index !== 0 &&
     index !== array.length - 1
   ), [])
 
   const data = useMemo(() =>
-    activeDay ? [roadBookData.find(({dayNumber}) => dayNumber === activeDay )!] : filteredRoadBook,
+    activeDay ? [roadTripData.find(({dayNumber}) => dayNumber === activeDay )!] : filteredRoadBook,
     [filteredRoadBook, activeDay]
   )
 
@@ -69,7 +80,7 @@ function App() {
       useCORS: true,
     }).then((canvas) => {
       const anchor = document.createElement('a');
-      const activeDayData = roadBookData.find(({dayNumber}) => dayNumber === activeDay);
+      const activeDayData = roadTripData.find(({dayNumber}) => dayNumber === activeDay);
 
       anchor.download = activeDayData ? kebabCase(`day-${activeDayData.dayNumber}-${activeDayData.morningLocation}-${activeDayData.eveningLocation}.png`) : 'full-route.png';
       anchor.href = canvas.toDataURL()
@@ -106,49 +117,11 @@ function App() {
       </AppBar>
       <Grid container spacing={0} direction="row" sx={{ flexGrow: 1}}>
         <Grid item sm={12} md={2} sx={{height: '100%', overflow: 'hidden'}} justifyContent="stretch">
-          <List sx={{  overflow: 'auto', maxHeight: 'calc(100vh - 75px)'}}>
-            {roadBookData
-              .filter((day, index) => day.morningLocation !== day.eveningLocation && index !== 0 && index !== roadBookData.length -1)
-              .map((day) =>
-                <ListItem disablePadding key={day.dayNumber}>
-                  <ListItemButton
-                    onClick={() => onShowRouteClick(day.dayNumber)}
-                    selected={activeDay === day.dayNumber}
-                  >
-                    <ListItemText
-                      primary={
-                        <Box sx={{ display: 'flex', gap: 1}}>
-                          <DriveEtaIcon />
-                          <Typography
-                            component="span">
-                            Day {day.dayNumber}
-                          </Typography>
-                        </Box>
-                    }
-                      secondary={
-                        <Box sx={{ display: 'flex', flexDirection: 'column' }}>
-                          <Typography
-                            variant="caption"
-                            component="span"
-                            sx={{display: 'inline-flex'}}
-                          >
-                            <PlaceIcon sx={{ mr: 1, width: 12}} />
-                            {day.morningLocation}
-                          </Typography>
-                          <Typography
-                            variant="caption"
-                            component="span"
-                            sx={{display: 'inline-flex'}}
-                          >
-                            <PlaceIcon sx={{ mr: 1, width: 12}} />
-                            {day.eveningLocation}
-                          </Typography>
-                        </Box>}
-                    />
-                  </ListItemButton>
-                </ListItem>
-            )}
-          </List>
+          <Sidebar
+            data={sidebarData}
+            activeDay={activeDay}
+            onDayClick={onShowRouteClick}
+          />
         </Grid>
         <Grid item sm={12} md={10}>
           {isLoaded ? (
@@ -204,7 +177,7 @@ function App() {
           <Table>
             <TableHead>
               <TableRow>
-                {Object.keys(roadBookData[0])
+                {Object.keys(roadTripData[0])
                   .map(((key) =>
                       <TableCell key={key}>{key}</TableCell>
                   ))
@@ -213,7 +186,7 @@ function App() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {roadBookData.map((data) =>
+              {roadTripData.map((data) =>
                 <TableRow key={data.dayNumber} selected={activeDay === data.dayNumber}>
                   {Object.entries(data)
                     .map(([key, value], index) =>

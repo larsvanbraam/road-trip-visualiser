@@ -25,6 +25,6 @@ yarn-error.log*
 
 token.json
 
-/src/asset/road-book-data.json
+/src/asset/data.json
 
 credentials.json

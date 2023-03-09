@@ -32,7 +32,7 @@ function App() {
 
   const [activeDay, setActiveDay] = useState<string>();
 
-  const sidebarData = useMemo(() =>
+  const travelDayData = useMemo(() =>
     roadTripData.filter((day, index) =>
       day.morningLocation !== day.eveningLocation &&
       index !== 0 &&
@@ -41,15 +41,9 @@ function App() {
     [roadTripData]
   )
 
-  const filteredRoadBook = useMemo(() => roadTripData.filter(({morningLocation, eveningLocation}, index, array) =>
-    morningLocation !== eveningLocation &&
-    index !== 0 &&
-    index !== array.length - 1
-  ), [])
-
-  const data = useMemo(() =>
-    activeDay ? [roadTripData.find(({dayNumber}) => dayNumber === activeDay )!] : filteredRoadBook,
-    [filteredRoadBook, activeDay]
+  const activeDirections = useMemo(() =>
+    activeDay ? [roadTripData.find(({dayNumber}) => dayNumber === activeDay )!] : travelDayData,
+    [travelDayData, activeDay]
   )
 
   const onShowRouteClick = useCallback((day:string) => {
@@ -72,13 +66,15 @@ function App() {
 
   return (
     <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column'}}>
-      <Navigation onFullRouteClick={() => {
-        tripOverviewHandles.current?.toggleDrawer()}
-      } />
+      <Navigation
+        onFullRouteClick={() => {
+          tripOverviewHandles.current?.toggleDrawer()}
+        }
+      />
       <Grid container spacing={0} direction="row" sx={{ flexGrow: 1}}>
         <Grid item sm={12} md={2} sx={{height: '100%', overflow: 'hidden'}} justifyContent="stretch">
           <Sidebar
-            data={sidebarData}
+            data={travelDayData}
             activeDay={activeDay}
             onDayClick={onShowRouteClick}
           />
@@ -98,7 +94,7 @@ function App() {
                 lng: -115.173146
               }}
             >
-              <Directions data={data} />
+              <Directions data={activeDirections} />
             </GoogleMap>
           ) : <CircularProgress /> }
 

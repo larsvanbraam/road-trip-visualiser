@@ -1,10 +1,72 @@
-# Getting Started with Create React App
+# Road Trip Visualiser
+This project started with me planning to go on a road trip to the west coast of America, the 
+idea was that we wanted to do the classic round trip where we go from Los Angels through 
+the Grand Canyon, some of the national parks and then finally end up in San Fransisco where 
+we would fly back to Amsterdam. I think that this trip changed about 500 times if it wasn't 
+more as every option had it's upsides and it's downsides. 
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Google offers this tool called [MyMaps](https://www.google.com/maps/d/u/0/?hl=nl) that 
+allows you to create your own custom maps and layers but this felt super clunky and meant 
+we had to maintain two sources as our base for planning the road trip was Google Sheets.
+
+So then I thought: "Why not do it myself? 🤔" 
+
+And so this project was born. 💪 
+
+## Getting started
+This project relies on the following technologies so please make sure to you are able to get API keys for all of them before investing time in setting this up.
+
+- Google Maps (This requires a creditcard)
+- Google Sheet API
+
+## Setting up the Sheet
+The project uses Google Sheet as the source, you can find the template that I used here, make sure to create a copy so 
+you can start adding your own road trip.
+
+**[➡️ Google sheet template](https://docs.google.com/spreadsheets/d/1vx0FWu5zmdzHatcLx4ZkxGPp4sdbuDkPIDovCp1lei8/edit?usp=sharing)**
+
+### Base trip configuration
+First off you'll have update the `Overview` tab with your departure and return flights, this will generate the stops 
+tab that you can fill in next. 
+
+### Fill in your trip information
+This is the part that will most likely change many times during the planning of your trip. Make sure to fill in all the 
+stops you would like to make during your trip. It will automatically generate the distance and travel time for your 
+addresses, so you get a first overview of the distance you'll be travelling.
+
+## Getting the Google Keys
+First of all you'll need a Google developer account and go to the console where you'll be creating a new project for your road trips
+
+**[☁️ Google cloud console](https://console.cloud.google.com/)**
+
+### Get a Google Maps API key
+This steps requires you to attach your creditcard to your account, note that the first x amount of requests is still 
+free but be aware you do not exceed this limit to avoid unexpected costs.
+
+### Create an OAuth 2.0 Client ID
+This is required as we are download this data from Google Sheets and this is done using the OAuth connection.
+
+This will allow you to download the json file from the console, make sure to download that in th root of the 
+project in a `credentials.json` file
+
+### Creating a .env file
+The next step is to create a .env file with the newly fetched credentials.
+
+```javascript
+REACT_APP_GOOGLE_MAPS_API_KEY=[ADD_GOOGLE_MAPS_KEY_HERE]
+REACT_APP_TOKEN_PATH=token.json
+REACT_APP_SHEET_ID=[ADD_SHEET_ID_HERE]
+REACT_APP_TAB_NAME=Stops
+REACT_APP_OUTPUT_PATH=./src/asset/
+```
 
 ## Available Scripts
 
 In the project directory, you can run:
+
+### `npm download`
+
+Will download the latest data from the Google Sheet
 
 ### `npm start`
 
@@ -28,19 +90,3 @@ The build is minified and the filenames include the hashes.\
 Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).

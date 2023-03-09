@@ -1,6 +1,5 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import ClearIcon from '@mui/icons-material/Clear';
-import ScreenshotMonitorIcon from '@mui/icons-material/ScreenshotMonitor';
 import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
 import { Libraries } from '@react-google-maps/api/dist/utils/make-load-script-url';
 import {
@@ -11,14 +10,13 @@ import {
 } from '@mui/material';
 import roadTripData from './asset/data.json';
 import Directions from './components/direction/Directions';
-import html2canvas from 'html2canvas';
-import { kebabCase } from 'lodash-es';
 import Sidebar from './components/sidebar/Sidebar';
 import TripOverview, { TripOverviewHandles } from './components/trip-overview/TripOverview';
+import Navigation from './components/navigation/Navigation';
+import ScreenshotButton from './components/screenshot-button/ScreenshotButton';
 
 import roadBookData from './asset/data.json';
 import './App.css';
-import Navigation from './components/navigation/Navigation';
 
 const libraries = ['geometry', 'drawing', 'places', 'places'] as Libraries;
 
@@ -48,20 +46,6 @@ function App() {
 
   const onShowRouteClick = useCallback((day:string) => {
     setActiveDay(activeDay === day ? undefined : day);
-  }, [activeDay])
-
-  // Does not work correctly in chrome 😭
-  const onScreenshotClick = useCallback(() => {
-    html2canvas(document.body.querySelector('.map-container')!, {
-      useCORS: true,
-    }).then((canvas) => {
-      const anchor = document.createElement('a');
-      const activeDayData = roadTripData.find(({dayNumber}) => dayNumber === activeDay);
-
-      anchor.download = activeDayData ? kebabCase(`day-${activeDayData.dayNumber}-${activeDayData.morningLocation}-${activeDayData.eveningLocation}.png`) : 'full-route.png';
-      anchor.href = canvas.toDataURL()
-      anchor.click();
-    })
   }, [activeDay])
 
   return (
@@ -110,17 +94,11 @@ function App() {
             Clear selection
           </Fab>}
 
-          <Fab
+          <ScreenshotButton
             sx={{ position: 'absolute', bottom: 16, right: 16 }}
-            variant="extended"
-            size="medium"
-            color="primary"
-            aria-label="Take screenshot"
-            onClick={onScreenshotClick}
-          >
-            <ScreenshotMonitorIcon sx={{ mr: 1 }} />
-            Take screenshot
-          </Fab>
+            data={roadTripData}
+            activeDay={activeDay}
+          />
         </Grid>
       </Grid>
       <TripOverview

@@ -12,10 +12,13 @@ type ScreenShotButtonProps = FabProps & {
 };
 
 function ScreenshotButton({data, activeDay, targetSelector = '.map-container', ...restProps}:ScreenShotButtonProps) {
-
   // Does not work correctly in chrome 😭
   const onScreenshotClick = useCallback(() => {
-      html2canvas(document.body.querySelector(targetSelector)!, {
+      const targetElement = document.body.querySelector<HTMLDivElement>(targetSelector);
+
+      if(!targetElement) throw new Error('Target element cannot be found, unable to take screenshot');
+
+      html2canvas(targetElement, {
         useCORS: true,
       }).then((canvas) => {
         const anchor = document.createElement('a');

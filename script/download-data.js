@@ -97,7 +97,6 @@ async function parseSheet(auth) {
     'eveningLocation',
     'distance',
     'time',
-    'note'
   ];
 
   const result = rows.map((row) =>

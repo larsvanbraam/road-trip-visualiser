@@ -46,11 +46,7 @@ function App() {
   const [activeDay, setActiveDay] = useState<string>();
 
   const travelDayData = useMemo(() =>
-    roadTripData.filter((day, index) =>
-      day.morningLocation !== day.eveningLocation &&
-      index !== 0 &&
-      index !== roadBookData.length -1
-    ),
+    roadTripData.filter((day) => Number(day.distance) > 0),
     [roadTripData]
   )
 

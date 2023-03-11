@@ -6,7 +6,6 @@ export type RoadTripStop = {
  eveningLocation: string;
  time: string;
  distance: string;
- note: string
 }
 
 export type RoadTrip = Array<RoadTripStop>

@@ -22,7 +22,7 @@ function Directions({ data } :DirectionProps) {
   const {dayNumber: endDayNumber, eveningLocation: destination = ''  } = useMemo<Partial<Direction>>(() => data.at(data.length -1) ?? {}, [data]);
 
   const id = useMemo(() => `${startDayNumber}.${endDayNumber}`, [startDayNumber, endDayNumber]);
-  const waypoints = useMemo(() => data.reduce((accumulator, { afternoonLocation, eveningLocation}, currentIndex) => [
+  const waypoints = useMemo(() => data.reduce((accumulator, { afternoonLocation, eveningLocation}) => [
     ...accumulator,
     ...(afternoonLocation ? afternoonLocation.split('|').map((location) => ({ location, stopover: false })) : []),
     { location: eveningLocation, }
@@ -35,7 +35,7 @@ function Directions({ data } :DirectionProps) {
     if(status === 'OK' && response !== null) {
       cachedDirections.current.set(id, response)
       setDirections(response)
-    }else {
+    } else {
       console.log({origin, destination}, status, response );
     }
   }, [destination, id, origin]);
@@ -52,7 +52,7 @@ function Directions({ data } :DirectionProps) {
   if(directions) {
     return (
       <DirectionsRenderer
-        options={{ directions  }}
+        options={{ directions }}
         onLoad={onDirectionsRendererCallback}
       />
     )
@@ -65,6 +65,7 @@ function Directions({ data } :DirectionProps) {
         destination,
         waypoints,
         travelMode: 'DRIVING' as google.maps.TravelMode,
+        unitSystem: google.maps.UnitSystem.METRIC,
       }}
       callback={onDirectionsCallback}
     />

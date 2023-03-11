@@ -29,6 +29,21 @@ const StyledTableRow = styled(TableRow)`
   &:nth-child(odd) {
     background: ${p => p.theme.palette.grey.A100};
   }
+  
+  &:hover {
+    background: ${p => p.theme.palette.grey.A200};
+    position: relative;
+    
+    > td:first-child::before {
+      content: '';
+      inline-size: 4px;
+      block-size: 100%;
+      position: absolute;
+      inset-block-start: 0;
+      inset-inline-start: 0;
+      background: ${p => p.theme.palette.secondary.main}
+    }
+  }
 `
 
 function TripOverview({ data, activeDay, onDayClick, handlesRef }: TripOverviewProps) {
@@ -79,16 +94,16 @@ function TripOverview({ data, activeDay, onDayClick, handlesRef }: TripOverviewP
                 )
               }
               <TableCell>
-                <Button
+                {Number(data.distance) > 0  && <Button
                   sx={{whiteSpace: 'nowrap'}}
                   onClick={() => {
-                   onDayButtonClick(data.dayNumber);
+                    onDayButtonClick(data.dayNumber);
                   }}
                   startIcon={<DirectionsIcon />}
                   variant="outlined"
                 >
-                    View route
-                </Button>
+                  View route
+                </Button>}
               </TableCell>
             </StyledTableRow>
           )}

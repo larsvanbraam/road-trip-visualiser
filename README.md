@@ -11,7 +11,10 @@ we had to maintain two sources as our base for planning the road trip was Google
 
 So then I thought: "Why not do it myself? 🤔" 
 
-And so this project was born. 💪 
+And so this project was born. 💪
+
+![Alt text](/screenshot.webp?raw=true "Screenshot of the Road Trip Visualizer")
+
 
 ## Getting started
 This project relies on the following technologies so please make sure to you are able to get API keys for all of them before investing time in setting this up.

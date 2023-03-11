@@ -1,10 +1,9 @@
-import React, { CSSProperties, useCallback, useMemo, useRef, useState } from 'react';
+import React, { useCallback, useMemo, useRef, useState } from 'react';
 import ClearIcon from '@mui/icons-material/Clear';
 import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
 import { Libraries } from '@react-google-maps/api/dist/utils/make-load-script-url';
 import { Box, CircularProgress, Fab, Grid, styled, ThemeProvider } from '@mui/material';
 import roadTripData from './asset/data.json';
-import roadBookData from './asset/data.json';
 import Directions from './components/direction/Directions';
 import Sidebar from './components/sidebar/Sidebar';
 import TripOverview, { TripOverviewHandles } from './components/trip-overview/TripOverview';

@@ -1,28 +1,5 @@
 import { createTheme } from '@mui/material';
 
-declare module '@mui/material/styles' {
-  // interface Palette {
-  //   white: Palette['primary'];
-  // }
-  //
-  // interface PaletteOptions {
-  //   white: PaletteOptions['primary'];
-  // }
-}
-
-declare module '@mui/material/FormControl' {
-  // interface FormControlPropsColorOverrides {
-  //   white: true
-  // }
-}
-
-declare module '@mui/material/Input' {
-  // interface InputLabelPropsColorOverrides {
-  //   white: true
-  // }
-}
-
-
 export const theme = createTheme({
   palette: {
     primary: {

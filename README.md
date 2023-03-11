@@ -13,7 +13,9 @@ So then I thought: "Why not do it myself? 🤔"
 
 And so this project was born. 💪
 
-![Alt text](/screenshot.webp?raw=true "Screenshot of the Road Trip Visualizer")
+![Alt text](/screenshots/screenshot.webp?raw=true "Main page of the visualizer")
+
+![Alt text](/screenshots/screenshot-2.webp?raw=true "Detail view of the visualizer")
 
 
 ## Getting started

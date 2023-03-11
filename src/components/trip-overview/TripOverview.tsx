@@ -1,5 +1,5 @@
-import { RoadTrip } from '../../types/roadTrip.types';
-import { Button, Drawer, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
+import { RoadTrip, RoadTripStop } from '../../types/roadTrip.types';
+import { Button, Drawer, styled, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material';
 import roadTripData from '../../asset/data.json';
 import DirectionsIcon from '@mui/icons-material/Directions';
 import React, { MutableRefObject, useCallback, useImperativeHandle, useState } from 'react';
@@ -14,6 +14,22 @@ type TripOverviewProps = {
   onDayClick: (dayNumber:string) => void
   handlesRef: MutableRefObject<TripOverviewHandles | undefined>
 }
+
+const labels: Record<keyof RoadTripStop, string> = {
+  dayNumber: 'Day',
+  date: 'Date',
+  morningLocation: 'Morning location',
+  afternoonLocation: 'Through',
+  eveningLocation: 'Evening location',
+  distance: 'Drive distance (km)',
+  time: 'Drive duration',
+}
+
+const StyledTableRow = styled(TableRow)`
+  &:nth-child(odd) {
+    background: ${p => p.theme.palette.grey.A100};
+  }
+`
 
 function TripOverview({ data, activeDay, onDayClick, handlesRef }: TripOverviewProps) {
   const [drawer, setDrawer] = useState(false);
@@ -35,12 +51,16 @@ function TripOverview({ data, activeDay, onDayClick, handlesRef }: TripOverviewP
       open={drawer}
       onClose={() => setDrawer(false)}
     >
-      <Table>
+      <Table sx={{ maxWidth: '80vw' }} stickyHeader>
         <TableHead>
           <TableRow>
             {Object.keys(roadTripData[0])
               .map(((key) =>
-                  <TableCell key={key}>{key}</TableCell>
+                  <TableCell
+                    sx={{whiteSpace: 'nowrap' }}
+                    key={key}>
+                    {labels[key as keyof RoadTripStop]}
+                  </TableCell>
               ))
             }
             <TableCell>View Route</TableCell>
@@ -48,11 +68,13 @@ function TripOverview({ data, activeDay, onDayClick, handlesRef }: TripOverviewP
         </TableHead>
         <TableBody>
           {data.map((data) =>
-            <TableRow key={data.dayNumber} selected={activeDay === data.dayNumber}>
+            <StyledTableRow key={data.dayNumber} selected={activeDay === data.dayNumber}>
               {Object.entries(data)
-                .map(([key, value], index) =>
+                .map(([key, value = '-'], index) =>
                   <TableCell key={`${value}.${index}`} >
-                    {value || '-'}
+                    <Typography variant="caption">
+                      {key === 'distance' ? `${value}km` : value }
+                    </Typography>
                   </TableCell>
                 )
               }
@@ -65,10 +87,10 @@ function TripOverview({ data, activeDay, onDayClick, handlesRef }: TripOverviewP
                   startIcon={<DirectionsIcon />}
                   variant="outlined"
                 >
-                  View route
+                    View route
                 </Button>
               </TableCell>
-            </TableRow>
+            </StyledTableRow>
           )}
         </TableBody>
       </Table>

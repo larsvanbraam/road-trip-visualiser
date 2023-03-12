@@ -34,7 +34,7 @@ const StyledTableRow = styled(TableRow)`
     background: ${p => p.theme.palette.grey.A200};
     position: relative;
     
-    > td:first-child::before {
+    > td:first-of-type::before {
       content: '';
       inline-size: 4px;
       block-size: 100%;

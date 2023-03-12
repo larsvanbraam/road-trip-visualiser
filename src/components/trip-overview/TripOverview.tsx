@@ -88,13 +88,13 @@ function TripOverview({ data, activeDay, onDayClick, handlesRef }: TripOverviewP
                 .map(([key, value = '-'], index) =>
                   <TableCell key={`${value}.${index}`} >
                     <Typography variant="caption">
-                      {key === 'distance' ? `${value}km` : value }
+                      {value}
                     </Typography>
                   </TableCell>
                 )
               }
               <TableCell>
-                {Number(data.distance) > 0  && <Button
+                {Number(data.distance.replace(' km', '')) > 0  && <Button
                   sx={{whiteSpace: 'nowrap'}}
                   onClick={() => {
                     onDayButtonClick(data.dayNumber);

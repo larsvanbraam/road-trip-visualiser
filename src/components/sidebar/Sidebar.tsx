@@ -1,5 +1,15 @@
-import roadBookData from '../../asset/data.json';
-import { Box, Divider, List, ListItem, ListItemButton, ListItemText, styled, Tooltip, Typography } from '@mui/material';
+import {
+  Box,
+  Divider,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  Skeleton,
+  styled,
+  Tooltip,
+  Typography,
+} from '@mui/material';
 import DriveEtaIcon from '@mui/icons-material/DriveEta';
 import PlaceIcon from '@mui/icons-material/Place';
 import React from 'react';
@@ -25,6 +35,9 @@ function Sidebar({ data, activeDay, onDayClick }: SidebarProps ) {
     </Box>
     <Divider />
     <List sx={{ overflow: 'auto', flexGrow: 1, }}>
+      {data.length === 0  && Array.from({ length: 5 }, (_, index) =>
+        <Skeleton key={index} variant="rounded" width="90%" height={100} sx={{ mb: 1, marginInline: 'auto', bgcolor: 'grey.200' }} />
+      )}
       {data
         .map((day) =>
           <ListItem disablePadding key={day.dayNumber}>

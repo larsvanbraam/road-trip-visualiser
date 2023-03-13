@@ -1,6 +1,5 @@
 import { RoadTrip, RoadTripStop } from '../../types/roadTrip.types';
 import { Button, Drawer, styled, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material';
-import roadTripData from '../../asset/data.json';
 import DirectionsIcon from '@mui/icons-material/Directions';
 import React, { MutableRefObject, useCallback, useImperativeHandle, useState } from 'react';
 
@@ -69,7 +68,7 @@ function TripOverview({ data, activeDay, onDayClick, handlesRef }: TripOverviewP
       <Table sx={{ maxWidth: '80vw' }} stickyHeader>
         <TableHead>
           <TableRow>
-            {Object.keys(roadTripData[0])
+            {Object.keys(data[0])
               .map(((key) =>
                   <TableCell
                     sx={{whiteSpace: 'nowrap' }}

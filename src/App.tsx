@@ -2,8 +2,7 @@ import React, { useCallback, useMemo, useRef, useState } from 'react';
 import ClearIcon from '@mui/icons-material/Clear';
 import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
 import { Libraries } from '@react-google-maps/api/dist/utils/make-load-script-url';
-import { Box, CircularProgress, Fab, Grid, styled, ThemeProvider } from '@mui/material';
-import roadTripData from './asset/data.json';
+import { Box, CircularProgress, Fab, Grid, styled, ThemeProvider, Typography } from '@mui/material';
 import Directions from './components/direction/Directions';
 import Sidebar from './components/sidebar/Sidebar';
 import TripOverview, { TripOverviewHandles } from './components/trip-overview/TripOverview';
@@ -11,6 +10,9 @@ import Navigation, { MapSize } from './components/navigation/Navigation';
 import ScreenshotButton from './components/screenshot-button/ScreenshotButton';
 import './App.css';
 import { theme } from './theme';
+
+import useGoogleSheets from 'use-google-sheets';
+import { parseGoogleSheetData } from './utils/parseGoogleSheetData';
 
 const libraries = ['geometry', 'drawing', 'places', 'places'] as Libraries;
 
@@ -36,11 +38,23 @@ function App() {
   const map = useRef<google.maps.Map>()
   const tripOverviewHandles = useRef<TripOverviewHandles>();
 
-  const { isLoaded } = useJsApiLoader({
+  const { data: rawSheetData, loading: isDataLoading, refetch: refreshData } = useGoogleSheets({
+    apiKey: process.env.REACT_APP_GOOGLE_API_KEY ?? '',
+    sheetId: process.env.REACT_APP_SHEET_ID ?? '',
+  });
+
+  const { isLoaded: isMapLoaded } = useJsApiLoader({
     libraries,
     id: 'google-map-script',
-    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY ?? '',
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_API_KEY ?? '',
   })
+
+  const roadTripData = useMemo(() =>
+      parseGoogleSheetData(
+        rawSheetData.find(({ id }) => id === process.env.REACT_APP_TAB_NAME ) ?? { data: [], id: '' }
+      ),
+    [rawSheetData]
+  )
 
   const [activeDay, setActiveDay] = useState<string>();
 
@@ -80,6 +94,8 @@ function App() {
             tripOverviewHandles.current?.toggleDrawer()}
           }
           onMapSizeChange={onMapSizeChange}
+          onUpdateData={refreshData}
+          isDataLoading={isDataLoading}
         />
         <Grid container spacing={0} direction="row" sx={{ flexGrow: 1}}>
           <Grid item sm={12} md={2} sx={{height: '100%', overflow: 'hidden'}} justifyContent="stretch">
@@ -90,7 +106,7 @@ function App() {
             />
           </Grid>
           <StyledMapContainer item sm={12} md={10}>
-            {isLoaded ? (
+            {!isDataLoading && isMapLoaded ? (
               <GoogleMap
                 mapContainerClassName='map-container'
                 mapContainerStyle={{
@@ -107,7 +123,12 @@ function App() {
               >
                 <Directions data={activeDirections} />
               </GoogleMap>
-            ) : <CircularProgress /> }
+            ) : <Box>
+              <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', blockSize: '100vh'}}>
+                <CircularProgress sx={{ mb: 1 }} />
+                <Typography variant="caption">Loading data...</Typography>
+              </Box>
+            </Box> }
 
             {activeDay && <Fab
               sx={{ position: 'absolute', bottom: 64, right: 16 }}
@@ -128,12 +149,14 @@ function App() {
             />
           </StyledMapContainer>
         </Grid>
-        <TripOverview
-          data={roadTripData}
-          activeDay={activeDay}
-          onDayClick={onShowRouteClick}
-          handlesRef={tripOverviewHandles}
-        />
+        {!isDataLoading && <
+          TripOverview
+            data={roadTripData}
+            activeDay={activeDay}
+            onDayClick={onShowRouteClick}
+            handlesRef={tripOverviewHandles}
+          />
+        }
       </Box>
     </ThemeProvider>
   );

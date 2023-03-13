@@ -12,6 +12,7 @@ import {
   Typography,
 } from '@mui/material';
 import GoogleIcon from '@mui/icons-material/Google';
+import CachedIcon from '@mui/icons-material/Cached';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import * as React from 'react';
 import { useCallback, useState } from 'react';
@@ -20,6 +21,8 @@ import { darkTheme } from '../../theme';
 type NavigationProps = {
   onFullRouteClick():void
   onMapSizeChange(size:MapSize):void
+  onUpdateData():void
+  isDataLoading: boolean;
 }
 
 export const enum MapSize {
@@ -27,7 +30,7 @@ export const enum MapSize {
   Fixed = 'fixed',
 }
 
-function Navigation({ onFullRouteClick, onMapSizeChange }:NavigationProps) {
+function Navigation({ onFullRouteClick, onMapSizeChange, onUpdateData, isDataLoading }:NavigationProps) {
   const [mapSize, setMapSize] = useState(MapSize.Cover);
 
   const onSizeChange = useCallback((
@@ -54,6 +57,15 @@ function Navigation({ onFullRouteClick, onMapSizeChange }:NavigationProps) {
           sx={{ mr: 1 }}
         >
           Source Sheet
+        </Button>
+        <Button
+          color="inherit"
+          onClick={onUpdateData}
+          startIcon={<CachedIcon />}
+          sx={{ mr: 1 }}
+          disabled={isDataLoading}
+        >
+          Update data
         </Button>
         <Button
           color="inherit"

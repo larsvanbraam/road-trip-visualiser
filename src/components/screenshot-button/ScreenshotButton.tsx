@@ -11,7 +11,7 @@ type ScreenShotButtonProps = FabProps & {
   targetSelector?:string;
 };
 
-function ScreenshotButton({data, activeDay, targetSelector = '.map-container', ...restProps}:ScreenShotButtonProps) {
+function ScreenshotButton({data = [], activeDay, targetSelector = '.map-container', ...restProps}:ScreenShotButtonProps) {
   // Does not work correctly in chrome 😭
   const onScreenshotClick = useCallback(() => {
       const targetElement = document.body.querySelector<HTMLDivElement>(targetSelector);

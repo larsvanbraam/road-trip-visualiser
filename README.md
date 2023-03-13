@@ -21,12 +21,12 @@ And so this project was born. 💪
 ## Getting started
 This project relies on the following technologies so please make sure to you are able to get API keys for all of them before investing time in setting this up.
 
+- Google Sheets 
 - Google Maps (This requires a creditcard)
-- Google Sheet API
 
 ## Setting up the Sheet
 The project uses Google Sheet as the source, you can find the template that I used here, make sure to create a copy so 
-you can start adding your own road trip.
+you can start adding your own road trip and set the sharing policy to "Everyone with the link"
 
 **[➡️ Google sheet template](https://docs.google.com/spreadsheets/d/1vx0FWu5zmdzHatcLx4ZkxGPp4sdbuDkPIDovCp1lei8/edit?usp=sharing)**
 
@@ -44,22 +44,18 @@ First of all you'll need a Google developer account and go to the console where 
 
 **[☁️ Google cloud console](https://console.cloud.google.com/)**
 
-### Get a Google Maps API key
+### Enable Google Maps
 This steps requires you to attach your creditcard to your account, note that the first x amount of requests is still 
 free but be aware you do not exceed this limit to avoid unexpected costs.
 
-### Create an OAuth 2.0 Client ID
-This is required as we are download this data from Google Sheets and this is done using the OAuth connection.
-
-This will allow you to download the json file from the console, make sure to download that in th root of the 
-project in a `credentials.json` file
+### Enable Google Sheets
+Simply enable Google Sheets Api for your API key.
 
 ### Creating a .env file
 The next step is to create a .env file with the newly fetched credentials.
 
 ```javascript
 REACT_APP_GOOGLE_MAPS_API_KEY=[ADD_GOOGLE_MAPS_KEY_HERE]
-REACT_APP_TOKEN_PATH=token.json
 REACT_APP_SHEET_ID=[ADD_SHEET_ID_HERE]
 REACT_APP_TAB_NAME=Stops
 REACT_APP_OUTPUT_PATH=./src/asset/
@@ -68,10 +64,6 @@ REACT_APP_OUTPUT_PATH=./src/asset/
 ## Available Scripts
 
 In the project directory, you can run:
-
-### `npm download`
-
-Will download the latest data from the Google Sheet
 
 ### `npm start`
 

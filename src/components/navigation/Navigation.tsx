@@ -13,16 +13,19 @@ import {
 } from '@mui/material';
 import GoogleIcon from '@mui/icons-material/Google';
 import CachedIcon from '@mui/icons-material/Cached';
-import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import * as React from 'react';
-import { useCallback, useState } from 'react';
+import { ChangeEvent, Fragment, useCallback, useState } from 'react';
 import { darkTheme } from '../../theme';
+import { Link } from 'react-router-dom';
+import { RouterLink } from '../../config/router';
+import { useRecoilValue } from 'recoil';
+import { activeSheetIdState } from '../../state/sheetState';
 
 type NavigationProps = {
-  onFullRouteClick():void
   onMapSizeChange(size:MapSize):void
   onUpdateData():void
   isDataLoading: boolean;
+  sheetId?: string,
 }
 
 export const enum MapSize {
@@ -30,8 +33,9 @@ export const enum MapSize {
   Fixed = 'fixed',
 }
 
-function Navigation({ onFullRouteClick, onMapSizeChange, onUpdateData, isDataLoading }:NavigationProps) {
+function Navigation({ onMapSizeChange, onUpdateData, isDataLoading }:NavigationProps) {
   const [mapSize, setMapSize] = useState(MapSize.Cover);
+  const sheetId = useRecoilValue(activeSheetIdState);
 
   const onSizeChange = useCallback((
     event: SelectChangeEvent<MapSize>,
@@ -40,56 +44,58 @@ function Navigation({ onFullRouteClick, onMapSizeChange, onUpdateData, isDataLoa
     onMapSizeChange(event.target.value as MapSize);
   }, [setMapSize]);
 
-
-  return <AppBar  position="relative" >
-    <ThemeProvider theme={darkTheme}>
-      <Toolbar>
-        <Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1}}>
-          <Typography variant="h5" component="h1" >
-            <strong>Road Trip Visualizer</strong> | <small>Amerika 2023</small>
-          </Typography>
-        </Box>
-        <Button
-          color="inherit"
-          href={`https://docs.google.com/spreadsheets/d/${process.env.REACT_APP_SHEET_ID}`}
-          target="_blank"
-          startIcon={<GoogleIcon />}
-          sx={{ mr: 1 }}
-        >
-          Source Sheet
-        </Button>
-        <Button
-          color="inherit"
-          onClick={onUpdateData}
-          startIcon={<CachedIcon />}
-          sx={{ mr: 1 }}
-          disabled={isDataLoading}
-        >
-          Update data
-        </Button>
-        <Button
-          color="inherit"
-          onClick={onFullRouteClick}
-          startIcon={<FormatListBulletedIcon />}
-          sx={{ mr: 1 }}
-        >
-          Full route details
-        </Button>
-        <FormControl variant="outlined" size="small" sx={{ minWidth: 200 }}>
-          <InputLabel id="demo-simple-select-label">Map size</InputLabel>
-          <Select
-            labelId="demo-simple-select-label"
-            value={mapSize}
-            label="Map size"
-            onChange={onSizeChange}
+  return <Fragment>
+    <AppBar  position="relative" >
+      <ThemeProvider theme={darkTheme}>
+        <Toolbar>
+          <Box sx={{ display: 'flex', flexDirection: 'column', flexGrow: 1}}>
+            <Typography variant="h5" component="h1" >
+              <strong>Road Trip Visualizer</strong>
+            </Typography>
+          </Box>
+          <Button
+            component={Link}
+            color="inherit"
+            to={RouterLink.EnterSheetId}
+            startIcon={<GoogleIcon />}
+            sx={{ mr: 1 }}
           >
-            <MenuItem value={MapSize.Fixed}>Fixed size</MenuItem>
-            <MenuItem value={MapSize.Cover}>Cover</MenuItem>
-          </Select>
-        </FormControl>
-      </Toolbar>
-    </ThemeProvider>
-  </AppBar>
+            Change source
+          </Button>
+          <Button
+            color="inherit"
+            href={`https://docs.google.com/spreadsheets/d/${sheetId}`}
+            target="_blank"
+            startIcon={<GoogleIcon />}
+            sx={{ mr: 1 }}
+          >
+            View source sheet
+          </Button>
+          <Button
+            color="inherit"
+            onClick={onUpdateData}
+            startIcon={<CachedIcon />}
+            sx={{ mr: 1 }}
+            disabled={isDataLoading}
+          >
+            Update data
+          </Button>
+          <FormControl variant="outlined" size="small" sx={{ minWidth: 200 }}>
+            <InputLabel id="demo-simple-select-label">Map size</InputLabel>
+            <Select
+              labelId="demo-simple-select-label"
+              value={mapSize}
+              label="Map size"
+              onChange={onSizeChange}
+            >
+              <MenuItem value={MapSize.Fixed}>Fixed size</MenuItem>
+              <MenuItem value={MapSize.Cover}>Cover</MenuItem>
+            </Select>
+          </FormControl>
+        </Toolbar>
+      </ThemeProvider>
+    </AppBar>
+  </Fragment>
 }
 
 export default Navigation;

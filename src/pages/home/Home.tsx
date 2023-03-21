@@ -102,7 +102,7 @@ export function Home() {
       // sheetId={sheetId}
     />
     <Grid container spacing={0} direction="row" sx={{ flexGrow: 1}}>
-      <Grid item sm={12} md={2} sx={{height: '100%', overflow: 'hidden'}} justifyContent="stretch">
+      <Grid item sm={12} md={4} lg={3} xl={2} sx={{height: '100%', overflow: 'hidden'}} justifyContent="stretch">
         <Sidebar
           data={travelDayData}
           activeDay={activeDay}
@@ -112,7 +112,7 @@ export function Home() {
           }
         />
       </Grid>
-      <StyledMapContainer item sm={12} md={10}>
+      <StyledMapContainer item sm={12} md={8} lg={9} xl={10}>
         {!isDataLoading && isMapLoaded ? (
           <GoogleMap
             mapContainerClassName='map-container'

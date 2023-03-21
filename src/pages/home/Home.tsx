@@ -110,10 +110,6 @@ export function Home() {
             options={{ disableDefaultUI: true }}
             zoom={8}
             onLoad={onMapLoaded}
-            center={{
-              lat: 36.110996,
-              lng: -115.173146
-            }}
           >
             <Directions data={activeDirections} />
           </GoogleMap>

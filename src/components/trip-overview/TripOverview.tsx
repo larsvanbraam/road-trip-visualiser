@@ -79,7 +79,7 @@ function TripOverview({ data, activeDay, onDayClick, handlesRef }: TripOverviewP
                     onDayButtonClick(data.dayNumber);
                   }}
                   startIcon={<DirectionsIcon />}
-                  variant="outlined"
+                  variant="contained"
                   color="secondary"
                 >
                   View route

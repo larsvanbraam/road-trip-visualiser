@@ -40,7 +40,7 @@ export function EnterSheetId() {
   const onSelectSheetId = useCallback((value:string) => {
     setSheetId(value);
     navigate('/')
-  }, [setLocalSheetId]);
+  }, [navigate, setSheetId]);
 
   const onDeleteSheetId = useCallback((value:string) => {
     const localSheetIds = [...sheetIds];
@@ -49,7 +49,7 @@ export function EnterSheetId() {
     localSheetIds.splice(index, 1);
 
     setSheetIds(localSheetIds);
-  }, [sheetIds, getSheetIdIndex])
+  }, [setSheetIds, sheetIds, getSheetIdIndex])
 
   const onSubmit = useCallback((event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -71,7 +71,7 @@ export function EnterSheetId() {
         : (sheetIds) => [newSheetId, ...sheetIds])
 
     onSelectSheetId(newSheetId)
-  }, [sheetIds, setSheetId]);
+  }, [setSheetIds, onSelectSheetId, sheetIds]);
 
   return <Fragment>
     {isMapLoaded && <GoogleMap
@@ -85,8 +85,8 @@ export function EnterSheetId() {
       options={{ disableDefaultUI: true,  }}
       zoom={3}
       center={{
-        lat: 36.110996,
-        lng: -115.173146
+        lat: 25,
+        lng: 0
       }}
     />}
     <EnterSheetIdContainer component="main" >

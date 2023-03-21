@@ -30,7 +30,7 @@ function Sidebar({ data, activeDay, onDayClick, onFullOverviewClick }: SidebarPr
   return <StyledSidebar>
     <StyledSidebarTop>
       <Typography variant="h6">Travel days</Typography>
-      <Typography variant="body1" sx={{ color: 'grey.A700', mb: 1 }}>All days that contain traveling, click on a day to see the route in isolation.</Typography>
+      <Typography variant="body2" sx={{ color: 'grey.A700', mb: 1 }}>All days that contain traveling, click on a day to see the route in isolation.</Typography>
     </StyledSidebarTop>
     <Divider />
     <StyledSidebarList disablePadding>
@@ -47,7 +47,7 @@ function Sidebar({ data, activeDay, onDayClick, onFullOverviewClick }: SidebarPr
               <ListItemText
                 primary={
                   <Box sx={{ display: 'flex', gap: 1}}>
-                    <DriveEtaIcon sx={{ color: 'primary.main' }} />
+                    <DriveEtaIcon sx={{ color: 'secondary.main' }} />
                     <Typography
                       component="span">
                       Day {day.dayNumber}

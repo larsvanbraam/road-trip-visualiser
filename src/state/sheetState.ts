@@ -1,10 +1,6 @@
 import { atom } from 'recoil';
 import { localStorageEffect } from './sheetState.effects';
-
-export const enum StateId {
-  sheetId = 'sheetId',
-  sheetIds = 'sheetIds',
-}
+import { StateId } from '../types/state.types';
 
 export const activeSheetIdState = atom<string>({
   key: StateId.sheetId,

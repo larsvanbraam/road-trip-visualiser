@@ -1,5 +1,5 @@
 import Navigation, { MapSize } from '../../components/navigation/Navigation';
-import { Box, CircularProgress, Fab, Grid, styled, Typography } from '@mui/material';
+import { Box, CircularProgress, Fab, Grid, Typography } from '@mui/material';
 import Sidebar from '../../components/sidebar/Sidebar';
 import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
 import Directions from '../../components/direction/Directions';
@@ -9,12 +9,10 @@ import TripOverview, { TripOverviewHandles } from '../../components/trip-overvie
 import React, { useCallback, useMemo, useRef, useState } from 'react';
 import useGoogleSheets from 'use-google-sheets';
 import { parseGoogleSheetData } from '../../utils/parseGoogleSheetData';
-import { Libraries } from '@react-google-maps/api/dist/utils/make-load-script-url';
 import { Navigate } from 'react-router-dom';
 import { useRecoilValue } from 'recoil';
 import { activeSheetIdState } from '../../state/sheetState';
-
-const libraries = ['geometry', 'drawing', 'places', 'places'] as Libraries;
+import { StyledHome, StyledLoaderContainer, StyledMapContainer } from './Home.styles';
 
 const mapSizeConfiguration = {
   [MapSize.Fixed]: {
@@ -26,13 +24,6 @@ const mapSizeConfiguration = {
     height:'100%',
   }
 }
-
-const StyledMapContainer = styled(Grid)`
-  background-color: ${p => p.theme.palette.grey.A200};
-  opacity: 0.8;
-  background-image: ${p => `linear-gradient(${p.theme.palette.grey.A100} 1px, transparent 1px), linear-gradient(to right, ${p.theme.palette.grey.A100} 1px, ${p.theme.palette.grey.A200} 1px)`};
-  background-size: 20px 20px;
-`
 
 export function Home() {
   const map = useRef<google.maps.Map>()
@@ -66,7 +57,7 @@ export function Home() {
 
   const activeDirections = useMemo(() =>
       activeDay ? [roadTripData.find(({dayNumber}) => dayNumber === activeDay )!] : travelDayData,
-    [travelDayData, activeDay]
+    [activeDay, roadTripData, travelDayData]
   )
 
   const onShowRouteClick = useCallback((day:string) => {
@@ -91,14 +82,14 @@ export function Home() {
     return <Navigate to="/enter-sheet-id" replace />;
   }
 
-  return <Box sx={{ minHeight: '100vh', display: 'flex', flexDirection: 'column'}}>
+  return <StyledHome>
     <Navigation
       onMapSizeChange={onMapSizeChange}
       onUpdateData={refreshData}
       isDataLoading={isDataLoading}
     />
     <Grid container spacing={0} direction="row" sx={{ flexGrow: 1}}>
-      <Grid item sm={12} md={4} lg={3} xl={2} sx={{height: '100%', overflow: 'hidden'}} justifyContent="stretch">
+      <Grid item sm={12} md={4} lg={3} xl={2} sx={{ height: '100%', overflow: 'hidden' }} justifyContent="stretch">
         <Sidebar
           data={travelDayData}
           activeDay={activeDay}
@@ -126,12 +117,12 @@ export function Home() {
           >
             <Directions data={activeDirections} />
           </GoogleMap>
-        ) : <Box>
-          <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', flexDirection: 'column', blockSize: '100vh'}}>
+        ) :
+          <StyledLoaderContainer>
             <CircularProgress sx={{ mb: 1 }} />
             <Typography variant="caption">Loading data...</Typography>
-          </Box>
-        </Box> }
+          </StyledLoaderContainer>
+         }
 
         {activeDay && <Fab
           sx={{ position: 'absolute', bottom: 64, right: 16 }}
@@ -160,5 +151,5 @@ export function Home() {
       handlesRef={tripOverviewHandles}
     />
     }
-  </Box>
+  </StyledHome>
 }

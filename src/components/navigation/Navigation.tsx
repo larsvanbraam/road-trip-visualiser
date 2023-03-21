@@ -11,8 +11,9 @@ import {
   Toolbar,
   Typography,
 } from '@mui/material';
-import GoogleIcon from '@mui/icons-material/Google';
 import CachedIcon from '@mui/icons-material/Cached';
+import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 import * as React from 'react';
 import { Fragment, useCallback, useState } from 'react';
 import { darkTheme } from '../../theme';
@@ -54,22 +55,22 @@ function Navigation({ onMapSizeChange, onUpdateData, isDataLoading }:NavigationP
             </Typography>
           </Box>
           <Button
-            component={Link}
-            color="inherit"
-            to={RouterLink.EnterSheetId}
-            startIcon={<GoogleIcon />}
-            sx={{ mr: 1 }}
-          >
-            Change source
-          </Button>
-          <Button
             color="inherit"
             href={`https://docs.google.com/spreadsheets/d/${sheetId}`}
             target="_blank"
-            startIcon={<GoogleIcon />}
+            startIcon={<OpenInNewIcon />}
             sx={{ mr: 1 }}
           >
-            View source sheet
+            View source
+          </Button>
+          <Button
+            component={Link}
+            color="inherit"
+            to={RouterLink.EnterSheetId}
+            startIcon={<SwapHorizIcon />}
+            sx={{ mr: 1 }}
+          >
+            Change source
           </Button>
           <Button
             color="inherit"

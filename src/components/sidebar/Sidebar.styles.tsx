@@ -22,21 +22,6 @@ export const StyledSidebarListItem = styled(ListItem)`
   }
 `
 
-export  const StyledStopLabel = styled(Typography)`
-  display: inline-flex;
-  text-overflow: ellipsis;
-  align-items: center;
-  overflow: hidden;
-  white-space: nowrap;
-  width: 100%;
-`
-
-export const StyledLocationLabel = styled('span')`
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-`
-
 export const StyledSidebarBottom = styled(Box)`
   padding-block: ${p => p.theme.spacing(2)};
   padding-inline: ${p => p.theme.spacing(1)}

@@ -17,7 +17,7 @@ import {
   StyledSidebarListItem,
   StyledSidebarTop,
 } from './Sidebar.styles';
-import { ListStop } from './Sidebar.components';
+import { ListStop } from './components/ListStop';
 
 type SidebarProps = {
   data: RoadTrip;

@@ -3,17 +3,17 @@ import { createTheme } from '@mui/material';
 export const theme = createTheme({
   palette: {
     primary: {
-      main: '#000B0D'
+      main: '#000B0D',
     },
     secondary: {
-      main: '#EF6024'
+      main: '#EF6024',
     },
   },
   components: {
     MuiFormControl: {
-      styleOverrides: {  }
-    }
-  }
+      styleOverrides: {},
+    },
+  },
 });
 
 export const darkTheme = createTheme({

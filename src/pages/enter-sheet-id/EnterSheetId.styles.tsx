@@ -8,16 +8,16 @@ export const EnterSheetIdContainer = styled(Box)`
   position: absolute;
   inset: 0;
   inline-size: 100%;
-  block-size: 100%
-`
+  block-size: 100%;
+`;
 
 export const EnterSheetIdModal = styled(Box)`
   min-width: 400px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  background-color: ${p => p.theme.palette.background.paper};
-  padding: ${p => p.theme.spacing(4)};
+  background-color: ${(p) => p.theme.palette.background.paper};
+  padding: ${(p) => p.theme.spacing(4)};
   border-radius: 10px;
-  box-shadow: ${shadows[4]}
+  box-shadow: ${shadows[4]};
 `;

@@ -5,17 +5,11 @@ import { StateId } from '../types/state.types';
 export const activeSheetIdState = atom<string>({
   key: StateId.sheetId,
   default: '',
-  effects: [
-    localStorageEffect<string>('active_sheet_id')
-  ]
+  effects: [localStorageEffect<string>('active_sheet_id')],
 });
 
 export const sheetIdsState = atom<Array<string>>({
   key: StateId.sheetIds,
   default: [],
-  effects: [
-    localStorageEffect<Array<string>>('sheet_history')
-  ]
+  effects: [localStorageEffect<Array<string>>('sheet_history')],
 });
-
-

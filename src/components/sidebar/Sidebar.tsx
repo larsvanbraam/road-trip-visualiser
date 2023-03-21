@@ -1,5 +1,6 @@
 import {
-  Box, Button,
+  Box,
+  Button,
   Divider,
   ListItemButton,
   ListItemText,
@@ -22,23 +23,32 @@ import { ListStop } from './components/ListStop';
 type SidebarProps = {
   data: RoadTrip;
   activeDay?: string;
-  onDayClick(dayNumber:string): void;
-  onFullOverviewClick():void
-}
+  onDayClick(dayNumber: string): void;
+  onFullOverviewClick(): void;
+};
 
-function Sidebar({ data, activeDay, onDayClick, onFullOverviewClick }: SidebarProps ) {
-  return <StyledSidebar>
-    <StyledSidebarTop>
-      <Typography variant="h6">Travel days</Typography>
-      <Typography variant="body2" sx={{ color: 'grey.A700', mb: 1 }}>All days that contain traveling, click on a day to see the route in isolation.</Typography>
-    </StyledSidebarTop>
-    <Divider />
-    <StyledSidebarList disablePadding>
-      {data.length === 0  && Array.from({ length: 5 }, (_, index) =>
-        <Skeleton key={index} variant="rounded" width="90%" height={100} sx={{ mb: 1, marginInline: 'auto', bgcolor: 'grey.200' }} />
-      )}
-      {data
-        .map((day) =>
+function Sidebar({ data, activeDay, onDayClick, onFullOverviewClick }: SidebarProps) {
+  return (
+    <StyledSidebar>
+      <StyledSidebarTop>
+        <Typography variant="h6">Travel days</Typography>
+        <Typography variant="body2" sx={{ color: 'grey.A700', mb: 1 }}>
+          All days that contain traveling, click on a day to see the route in isolation.
+        </Typography>
+      </StyledSidebarTop>
+      <Divider />
+      <StyledSidebarList disablePadding>
+        {data.length === 0 &&
+          Array.from({ length: 5 }, (_, index) => (
+            <Skeleton
+              key={index}
+              variant="rounded"
+              width="90%"
+              height={100}
+              sx={{ mb: 1, marginInline: 'auto', bgcolor: 'grey.200' }}
+            />
+          ))}
+        {data.map((day) => (
           <StyledSidebarListItem disablePadding key={day.dayNumber}>
             <ListItemButton
               onClick={() => onDayClick(day.dayNumber)}
@@ -46,12 +56,9 @@ function Sidebar({ data, activeDay, onDayClick, onFullOverviewClick }: SidebarPr
             >
               <ListItemText
                 primary={
-                  <Box sx={{ display: 'flex', gap: 1}}>
+                  <Box sx={{ display: 'flex', gap: 1 }}>
                     <DriveEtaIcon sx={{ color: 'secondary.main' }} />
-                    <Typography
-                      component="span">
-                      Day {day.dayNumber}
-                    </Typography>
+                    <Typography component="span">Day {day.dayNumber}</Typography>
                   </Box>
                 }
                 primaryTypographyProps={{
@@ -59,31 +66,33 @@ function Sidebar({ data, activeDay, onDayClick, onFullOverviewClick }: SidebarPr
                   mb: 1,
                 }}
                 secondaryTypographyProps={{
-                  component: 'div'
+                  component: 'div',
                 }}
                 secondary={
                   <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
                     <ListStop location={day.morningLocation} />
                     <ListStop location={day.eveningLocation} />
-                  </Box>}
+                  </Box>
+                }
               />
             </ListItemButton>
           </StyledSidebarListItem>
-        )}
-    </StyledSidebarList>
-    <Divider />
-    <StyledSidebarBottom>
-      <Button
-        color="primary"
-        variant="text"
-        onClick={onFullOverviewClick}
-        startIcon={<FormatListBulletedIcon />}
-        sx={{ mr: 1, width: '100%' }}
-      >
-        View full overview
-      </Button>
-    </StyledSidebarBottom>
-  </StyledSidebar>
+        ))}
+      </StyledSidebarList>
+      <Divider />
+      <StyledSidebarBottom>
+        <Button
+          color="primary"
+          variant="text"
+          onClick={onFullOverviewClick}
+          startIcon={<FormatListBulletedIcon />}
+          sx={{ mr: 1, width: '100%' }}
+        >
+          View full overview
+        </Button>
+      </StyledSidebarBottom>
+    </StyledSidebar>
+  );
 }
 
 export default Sidebar;

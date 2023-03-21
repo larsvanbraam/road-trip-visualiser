@@ -87,8 +87,6 @@ export function Home() {
     element.style.height = height;
   }, [])
 
-  console.log(error, sheetId);
-
   if(error || !sheetId) {
     return <Navigate to="/enter-sheet-id" replace />;
   }
@@ -98,8 +96,6 @@ export function Home() {
       onMapSizeChange={onMapSizeChange}
       onUpdateData={refreshData}
       isDataLoading={isDataLoading}
-      // onSheetIdChanged={setSheetId}
-      // sheetId={sheetId}
     />
     <Grid container spacing={0} direction="row" sx={{ flexGrow: 1}}>
       <Grid item sm={12} md={4} lg={3} xl={2} sx={{height: '100%', overflow: 'hidden'}} justifyContent="stretch">

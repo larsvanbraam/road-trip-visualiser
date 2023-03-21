@@ -17,7 +17,7 @@ export const StyledSidebarList = styled(List)`
 `
 
 export const StyledSidebarListItem = styled(ListItem)`
-  &:nth-child(odd) {
+  &:nth-of-type(odd) {
     background: ${p => alpha(p.theme.palette.grey.A100, 0.5)}
   }
 `

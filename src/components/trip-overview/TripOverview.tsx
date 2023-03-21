@@ -1,7 +1,8 @@
 import { RoadTrip, RoadTripStop } from '../../types/roadTrip.types';
-import { Button, Drawer, styled, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material';
+import { Button, Drawer, Table, TableBody, TableCell, TableHead, TableRow, Typography } from '@mui/material';
 import DirectionsIcon from '@mui/icons-material/Directions';
 import React, { MutableRefObject, useCallback, useImperativeHandle, useState } from 'react';
+import { StyledTableRow } from './TripOverview.styles';
 
 export type TripOverviewHandles = {
   toggleDrawer():void
@@ -23,27 +24,6 @@ const labels: Record<keyof RoadTripStop, string> = {
   distance: 'Drive distance (km)',
   time: 'Drive duration',
 }
-
-const StyledTableRow = styled(TableRow)`
-  &:nth-child(odd) {
-    background: ${p => p.theme.palette.grey.A100};
-  }
-  
-  &:hover {
-    background: ${p => p.theme.palette.grey.A200};
-    position: relative;
-    
-    > td:first-of-type::before {
-      content: '';
-      inline-size: 4px;
-      block-size: 100%;
-      position: absolute;
-      inset-block-start: 0;
-      inset-inline-start: 0;
-      background: ${p => p.theme.palette.secondary.main}
-    }
-  }
-`
 
 function TripOverview({ data, activeDay, onDayClick, handlesRef }: TripOverviewProps) {
   const [drawer, setDrawer] = useState(false);

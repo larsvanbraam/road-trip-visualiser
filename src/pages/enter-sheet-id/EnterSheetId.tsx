@@ -1,8 +1,14 @@
 import {
   Box,
   Button,
-  List, ListItem, ListItemButton, ListItemIcon, ListItemText,
+  IconButton,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemIcon,
+  ListItemText,
   TextField,
+  Tooltip,
   Typography,
 } from '@mui/material';
 import React, { Fragment, useCallback, useRef, useState } from 'react';
@@ -11,6 +17,8 @@ import { useRecoilValue, useSetRecoilState } from 'recoil';
 import { activeSheetIdState, sheetIdsState } from '../../state/sheetState';
 import { GoogleMap, useJsApiLoader } from '@react-google-maps/api';
 import FileOpenIcon from '@mui/icons-material/FileOpen';
+import DeleteIcon from '@mui/icons-material/Delete';
+import { EnterSheetIdContainer, EnterSheetIdModal } from './EnterSheetId.styles';
 
 export function EnterSheetId() {
   const navigate = useNavigate();
@@ -27,11 +35,21 @@ export function EnterSheetId() {
   const [localSheetId, setLocalSheetId] = useState<string>('')
   const sheetIds = useRecoilValue(sheetIdsState);
 
+  const getSheetIdIndex = useCallback((id:string) => sheetIds.findIndex((value) => value === id), [sheetIds])
+
   const onSelectSheetId = useCallback((value:string) => {
     setSheetId(value);
-
     navigate('/')
   }, [setLocalSheetId]);
+
+  const onDeleteSheetId = useCallback((value:string) => {
+    const localSheetIds = [...sheetIds];
+    const index = getSheetIdIndex(value);
+
+    localSheetIds.splice(index, 1);
+
+    setSheetIds(localSheetIds);
+  }, [sheetIds, getSheetIdIndex])
 
   const onSubmit = useCallback((event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -43,7 +61,7 @@ export function EnterSheetId() {
       throw new Error('No id was provided');
     }
 
-    const index = sheetIds.findIndex((value) => value === newSheetId)
+    const index = getSheetIdIndex(newSheetId)
 
     setSheetIds(
       index > -1
@@ -71,27 +89,8 @@ export function EnterSheetId() {
         lng: -115.173146
       }}
     />}
-    <Box component="main" sx={{
-      display: 'flex',
-
-      justifyContent: 'center',
-      alignItems: 'center',
-      position: 'absolute',
-      inset: 0,
-      inlineSize: '100%',
-      blockSize: '100%'
-    }}>
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'flex-start',
-          bgcolor: 'background.paper',
-          padding: 4,
-          borderRadius: '10px',
-          boxShadow: 4,
-        }}
-      >
+    <EnterSheetIdContainer component="main" >
+      <EnterSheetIdModal>
         <Typography component="h1" variant="h5" sx={{ mb: 2 }}>
           Enter the Google Sheet id
         </Typography>
@@ -124,8 +123,18 @@ export function EnterSheetId() {
           </Typography>
           <List>
             {sheetIds.map((value) =>
-              <ListItem disablePadding>
-                <ListItemButton onClick={() => onSelectSheetId(value)}>
+              <ListItem
+                key={value}
+                disablePadding
+                secondaryAction={
+                  <Tooltip title="Remove this id from the history" placement="top">
+                    <IconButton edge="end" aria-label="delete" onClick={() => onDeleteSheetId(value)}>
+                      <DeleteIcon />
+                    </IconButton>
+                  </Tooltip>
+                }
+              >
+                <ListItemButton onClick={() => onSelectSheetId(value)} >
                   <ListItemIcon>
                     <FileOpenIcon />
                   </ListItemIcon>
@@ -135,7 +144,7 @@ export function EnterSheetId() {
             )}
           </List>
         </Box>}
-      </Box>
-    </Box>
+      </EnterSheetIdModal>
+    </EnterSheetIdContainer>
   </Fragment>
 }
